@@ -1,13 +1,13 @@
-from slackclient import SlackClient
+from    slack import Slack
 import requests
 
 class Location():
-    def __init__(self, sc, uid, secret):
-        self.sc = sc
+    def __init__(self, slack, uid, secret):
+        self.slack = slack
         self.uid = uid
         self.secret = secret
         self.token = self.get_token()
-        self.smala = ['apeyret', 'oel-ayad', 'cvignal', 'clfoltra', 'glavigno', 'sboulaao', 'thdervil', 'gchainet']
+        self.smala = ['apeyret', 'clfoltra', 'cvignal', 'gchainet', 'gdrai', 'glavigno', 'oel-ayad', 'sboulaao', 'thdervil']
 
     def get_token(self):
         d = {'grant_type': 'client_credentials',
@@ -20,7 +20,7 @@ class Location():
         data = requests.get("https://api.intra.42.fr/v2/users/" + user, headers={'Authorization': 'Bearer ' + self.token})
         if data.status_code == 404:
             return user + " not found\n"
-        elif data.status_code == 404:
+        elif data.status_code == 401:
             self.token = self.get_token()
             return self.location_of(user)
         lct = data.json()['location']
@@ -32,6 +32,8 @@ class Location():
         lct = ''
         for user in self.smala:
             lct += self.location_of(user)
+        if lct == '':
+            return "Personne n'est connecté"
         return lct
 
     def send_location(self, users):
@@ -45,7 +47,4 @@ class Location():
                     lct += tmp;
                 else:
                     lct += user + ': `Unavailable`\n'
-        self.sc.api_call(
-            "chat.postMessage",
-            channel="CFTUZTEM7",
-            text=lct)
+        self.slack.postmsg(lct)
