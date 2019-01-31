@@ -16,24 +16,40 @@ class Location():
         r = requests.post("https://api.intra.42.fr/oauth/token", data=d)
         return r.json()['access_token']
 
-    def location_of(self, user):
-        data = requests.get("https://api.intra.42.fr/v2/users/" + user, headers={'Authorization': 'Bearer ' + self.token})
+    def get_location(self):
+        data = requests.get("https://api.intra.42.fr/v2/campus/1/locations", headers={'Authorization': 'Bearer ' + self.token})
         if data.status_code == 404:
             return user + " not found\n"
         elif data.status_code == 401:
             self.token = self.get_token()
-            return self.location_of(user)
-        lct = data.json()['location']
-        if lct == None:
-            return ''
-        return user + ': `' + lct + '`\n'
+            return self.get_location()
+        data_json = data.json()
+        return data_json
+
+    def location_search(self, places, user):
+        for place in places:
+            if place['user']['login'] == user:
+                return user + ': `' + place['host'] + '`\n'
+        return ''
 
     def location_all(self):
         lct = ''
+        places = self.get_location()
         for user in self.smala:
-            lct += self.location_of(user)
+            lct += self.location_search(places, user)
         if lct == '':
             return "Personne n'est connecté"
+        return lct
+
+    def location_of(self, users):
+        lct = ''
+        places = self.get_location()
+        for user in users:
+            tmp = self.location_search(places, user)
+            if tmp == '':
+                lct += user + ':  `Unavailable`\n'
+            else:
+                lct += tmp
         return lct
 
     def send_location(self, users):
@@ -41,10 +57,5 @@ class Location():
         if len(users) == 0:
             lct = self.location_all()
         else:
-            for user in users:
-                tmp = self.location_of(user)
-                if tmp != '':
-                    lct += tmp;
-                else:
-                    lct += user + ': `Unavailable`\n'
+            lct = self.location_of(users)
         self.slack.postmsg(lct)
