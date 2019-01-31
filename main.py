@@ -12,21 +12,28 @@ def get_token():
     return r.json()['access_token']
 
 def location_of(user, token):
-    lol = requests.get("https://api.intra.42.fr/v2/users/apeyret", headers={'Authorization': 'Bearer ' + token})
+    lol = requests.get("https://api.intra.42.fr/v2/users/" + user, headers={'Authorization': 'Bearer ' + token})
     dat = lol.json()['location']
+    if dat == None:
+        print("Unavailable")
+        return "Unavailable"
+    print(dat)
+    return dat
+
 
 slack_token = os.environ["SLACK_API_TOKEN"]
 sc = SlackClient(slack_token)
 
 
 token = get_token()
-print(sc.api_call(
-  "chat.postMessage",
-  channel="CCEELHRR6",
-  text="""apeyret: {}
-  oel-ayad: {}
-  glavigno: {}
-  cvignal: {}
-  thdervil: {}""".format(location_of("apeyret", token), location_of("oel-ayad", token), location_of("glavigno", token), location_of("cvignal", token), location_of("thdervil", token)),
-))
-print("lol\n")
+print(token)
+sc.api_call(
+    "chat.postMessage",
+    channel="CFTUZTEM7",
+    text="""apeyret: {}
+oel-ayad: {}
+glavigno: {}
+cvignal: {}
+thdervil: {}
+clfoltra: {}""".format(location_of("apeyret", token), location_of("oel-ayad", token), location_of("glavigno", token), location_of("cvignal", token), location_of("thdervil", token), location_of("clfoltra", token)),
+)
