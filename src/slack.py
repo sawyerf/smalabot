@@ -15,6 +15,8 @@ class   Slack():
         print(msg)
         if msg[:4] == '!lct':
             lct.send_location(msg.split(" ")[1:])
+        elif msg[:5] == '!ping':
+            self.postmsg("pong")
         elif msg[:5] == '!help':
             self.postmsg("""help:
 ```!help  affiche ce message
