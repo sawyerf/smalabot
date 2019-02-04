@@ -20,7 +20,8 @@ class   Slack():
         elif msg[:5] == '!help':
             self.postmsg("""help:
 ```!help  affiche ce message
-!lct   affiche les place de la smala```""")
+!lct   affiche les place de la smala
+!ping  pong```""")
 
     def run(self, lct):
         if self.sc.rtm_connect():

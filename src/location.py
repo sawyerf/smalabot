@@ -17,7 +17,7 @@ class Location():
         return r.json()['access_token']
 
     def get_user(self, user):
-        data = requests.get("https://api.intra.42.fr/v2/user" + user, headers={'Authorization': 'Bearer ' + self.token})
+        data = requests.get("https://api.intra.42.fr/v2/users/" + user, headers={'Authorization': 'Bearer ' + self.token})
         if data.status_code == 404:
             return None
         elif data.status_code == 401:
