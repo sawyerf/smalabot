@@ -1,4 +1,5 @@
 from slackclient    import SlackClient
+from utils import *
 
 class   Slack():
     def __init__(self, token):
@@ -12,7 +13,7 @@ class   Slack():
         )
 
     def router(self, msg, lct):
-        print(msg)
+        debug(msg)
         if msg[:4] == '!lct':
             lct.send_location(msg.split(" ")[1:])
         elif msg[:5] == '!ping':
@@ -29,6 +30,9 @@ class   Slack():
             while self.sc.server.connected is True:
                 msgs = self.sc.rtm_read()
                 for msg in msgs:
-                    print(msg)
                     if msg['type'] == 'message' and msg['channel'] == 'CFTUZTEM7':
+                        try:
                             self.router(msg['text'], lct)
+                        except:
+                            debug("nike charles")
+            debug("sortie")

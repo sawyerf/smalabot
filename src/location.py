@@ -1,4 +1,5 @@
-from    slack import Slack
+from slack import Slack
+from utils import *
 import requests
 
 class Location():
@@ -14,7 +15,9 @@ class Location():
             'client_id': self.uid,
             'client_secret': self.secret}
         r = requests.post("https://api.intra.42.fr/oauth/token", data=d)
-        return r.json()['access_token']
+        token = r.json()['access_token']
+        debug("New token (" + token + ")")
+        return token
 
     def get_user(self, user):
         data = requests.get("https://api.intra.42.fr/v2/users/" + user, headers={'Authorization': 'Bearer ' + self.token})
@@ -23,8 +26,11 @@ class Location():
         elif data.status_code == 401:
             self.token = self.get_token()
             return self.get_location()
-        data_json = data.json()
-        return data_json
+        elif data.status_code == 200:
+            data_json = data.json()
+            return data_json
+        else
+            return None
 
     def location_of(self, user):
         data = self.get_user(user)

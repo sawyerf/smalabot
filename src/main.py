@@ -13,5 +13,4 @@ lct = Location(
         uid=ft_uid,
         secret=ft_secret)
 
-print(lct.token)
 slack.run(lct)
