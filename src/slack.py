@@ -4,6 +4,10 @@ from utils import *
 class   Slack():
     def __init__(self, token):
         self.sc = SlackClient(token)
+        if self.sc.rtm_connect():
+            self.start = True
+        else:
+            self.start = False
 
     def postmsg(self, msg, channel="CFTUZTEM7"):
         self.sc.api_call(
@@ -12,27 +16,13 @@ class   Slack():
             text=msg
         )
 
-    def router(self, msg, lct):
-        debug(msg)
-        if msg[:4] == '!lct':
-            lct.send_location(msg.split(" ")[1:])
-        elif msg[:5] == '!ping':
-            self.postmsg("pong")
-        elif msg[:5] == '!help':
-            self.postmsg("""help:
-```!help  affiche ce message
-!lct   affiche les place de la smala
-!ping  pong```""")
-
-    def run(self, lct):
-        if self.sc.rtm_connect():
-            self.postmsg("Smalabot est connecté")
-            while self.sc.server.connected is True:
-                msgs = self.sc.rtm_read()
-                for msg in msgs:
-                    if msg['type'] == 'message' and msg['channel'] == 'CFTUZTEM7':
-                        try:
-                            self.router(msg['text'], lct)
-                        except:
-                            debug("nike charles")
-            debug("sortie")
+    def get_msg(self):
+        lst = []
+        if  self.start and self.sc.server.connected is True:
+            msgs = self.sc.rtm_read()
+            for msg in msgs:
+                if msg['type'] == 'message' and msg['channel'] == 'CFTUZTEM7':
+                    lst.append(msg['text'])
+            return lst
+        else:
+            return None
