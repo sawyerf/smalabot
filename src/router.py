@@ -20,6 +20,8 @@ class Router():
             self.lct.send_info(msgs[1:], "phone")
         elif msgs[0] == "!id":
             self.lct.send_info(msgs[1:], "id")
+        elif msgs[0] == "!bite":
+            self.lct.get_free_place()
         elif msgs[0] == '!ping':
             self.slack.postmsg("pong")
         elif msgs[0] == '!help':
