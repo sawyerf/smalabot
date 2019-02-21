@@ -22,7 +22,10 @@ class   Slack():
             msgs = self.sc.rtm_read()
             for msg in msgs:
                 if msg['type'] == 'message' and msg['channel'] == 'CFTUZTEM7':
-                    lst.append(msg['text'])
+                    try:
+                        lst.append(msg['text'])
+                    excpet:
+                        debug(str(lst))
             return lst
         else:
             return None

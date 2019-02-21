@@ -49,7 +49,7 @@ class Location():
             return None
         elif data.status_code == 401:
             self.token = self.get_token()
-            return self.get_location()
+            return self.get_api()
         elif data.status_code == 200:
             data_json = data.json()
             return data_json
@@ -69,10 +69,8 @@ class Location():
         data = self.get_api("/campus/1/locations?filter[host]={}&filter[active]=true&page[size]=100&sort=host".format(tmp))
         if data == None:
             return
-        print(len(self.host))
         for i in data:
             lst.append(i['host'])
-        print(lst)
         for i in self.host:
             if i in lst:
                 continue
@@ -97,8 +95,6 @@ class Location():
         return (data)
 
     def get_info(self, user, info):
-        if user[:3] == 'lif':
-            return 'https://www.youtube.com/watch?v=qMtQE1lbPho\n'
         data = self.get_api("/users/" + user)
         if data == None:
             return user + " n'a pas ete trouve\n"
