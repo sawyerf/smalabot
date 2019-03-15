@@ -6,7 +6,7 @@ from router	 import Router
 from utils	  import debug
 
 
-time.sleep(10)
+time.sleep(20)
 slack_token = os.environ["SLACK_API_TOKEN"]
 ft_uid = os.environ["ft_uid"]
 ft_secret = os.environ["ft_secret"]
@@ -22,7 +22,6 @@ slack.postmsg("Smalabot est connecté")
 while True:
 	msgs = slack.get_msg()
 	if msgs == None:
-		debug("Message Slack vide")
 		continue
 	for msg in msgs:
 		rout.router(msg)

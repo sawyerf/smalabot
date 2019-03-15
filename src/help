@@ -1,8 +1,9 @@
 ```
-!help  affiche ce message
-!lct   affiche la place d'un student
-!id    affiche la id d'un student
-!phone affiche le numero de telephone d'un student
-!free  affiche les places libre dans le fond de l'e2
-!ping  renvoie pong
+!help  		affiche ce message
+!lct   		affiche la place d'un student
+!id    		affiche la id d'un student
+!phone 		affiche le numero de telephone d'un student
+!free  		affiche les places libre dans le fond de l'e2
+!ping  		renvoie pong
+!inspecteur	Inspecteur Billy Janson à votre service
 ```
